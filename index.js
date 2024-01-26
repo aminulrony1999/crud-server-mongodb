@@ -19,7 +19,7 @@ const client = new MongoClient(uri, {
     deprecationErrors: true,
   },
 });
-
+// if we want to use await in a funciton, then we will have to use async before a function
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
