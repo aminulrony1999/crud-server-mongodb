@@ -5,7 +5,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 //middlewares
-app.use(cors()); //without cors, fetch req won't work properly, it won't be able to load data 
+app.use(cors()); //without cors, fetch req won't work properly, it won't be able to load data
 app.use(express.json()); //body will be undefined if we use this middleware
 
 const uri =
@@ -24,19 +24,14 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
-
-
-    app.post("/users", async(req,res)=>{
+    const database = client.db("usersDB");
+    const userCollection = database.collection("users");
+    app.post("/users", async (req, res) => {
       const user = req.body;
-      console.log("New user ",user);
+      console.log("New user ", user);
+      const result = await userCollection.insertOne(user);
+      res.send(result);
     });
-
-
-
-
-
-
-
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
