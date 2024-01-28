@@ -5,8 +5,8 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 //middlewares
-app.use(cors());
-app.use(express.json());
+app.use(cors()); //without cors, fetch req won't work properly, it won't be able to load data 
+app.use(express.json()); //body will be undefined if we use this middleware
 
 const uri =
   "mongodb+srv://aminulrony2024:WxATObjJxaXx991x@cluster0.r6mkchy.mongodb.net/?retryWrites=true&w=majority";
@@ -26,7 +26,7 @@ async function run() {
     await client.connect();
 
 
-    app.post("/users",(req,res)=>{
+    app.post("/users", async(req,res)=>{
       const user = req.body;
       console.log("New user ",user);
     });
