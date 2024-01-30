@@ -6,7 +6,7 @@ const port = process.env.PORT || 5000;
 
 //middlewares
 app.use(cors()); //without cors, fetch req won't work properly, it won't be able to load data
-app.use(express.json()); //body will be undefined if we use this middleware
+app.use(express.json()); //body will be undefined if we don't use this middleware
 
 const uri =
   "mongodb+srv://aminulrony2024:WxATObjJxaXx991x@cluster0.r6mkchy.mongodb.net/?retryWrites=true&w=majority";
@@ -49,6 +49,20 @@ async function run() {
       const user = await userCollection.findOne(query);
       res.send(user);
     });
+    app.put("/users/:id", async(req,res) => {
+      const id = req.params.id;
+      const filter = {_id : new ObjectId(id)};
+      const options = {upsert: true};
+      const user = req.body;
+      const updatedUser = {
+        $set: {
+          name: user.name,
+          email  : user.email
+        }
+      }
+      const result = await userCollection.updateOne(filter, updatedUser, options);
+      res.send(result);
+    })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
